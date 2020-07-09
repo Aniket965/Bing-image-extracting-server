@@ -61,6 +61,15 @@ app.get("/unsplash1", (req, res) => {
     .pipe(res);
 })
 
+app.get("/unsplash3", (req, res) => {
+  request("https://source.unsplash.com/random/800x200?unicorn")
+    .on("response", rese => {
+      // You can add/remove/modify headers here
+      setHeadersForCacheLength(rese, 0);
+    })
+    .pipe(res);
+})
+
 app.get("/unsplash2", (req, res) => {
 
   request("https://source.unsplash.com/random/800x200")
