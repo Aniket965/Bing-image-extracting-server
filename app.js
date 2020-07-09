@@ -34,26 +34,38 @@ function setHeadersForCacheLength(res, cacheLengthSeconds) {
   let cacheControl, expires
   if (cacheLengthSeconds === 0) {
     // Prevent as much downstream caching as possible.
-    cacheControl = 'no-cache, no-store, must-revalidate'
+    cacheControl = 'max-age=0, no-cache, no-store, must-revalidate'
     expires = nowGMTString
   } else {
     cacheControl = `max-age=${cacheLengthSeconds}, s-maxage=${cacheLengthSeconds}`
     expires = new Date(now.getTime() + cacheLengthSeconds * 1000).toGMTString()
   }
 
-  res.setHeader('Date', nowGMTString)
-  res.setHeader('Cache-Control', cacheControl)
-  res.setHeader('Expires', expires)
+  res.headers['Date'] = nowGMTString
+  res.headers['Cache-Control'] = cacheControl
+  res.headers['Expires'] = expires
 }
 
 app.get("/unsplash", (req, res) => {
-  setHeadersForCacheLength(res,5);
-  request("https://source.unsplash.com/random/800x400?space").pipe(res);
+
+  request("https://source.unsplash.com/random/800x400?space")
+  .on("response", rese => {
+    // You can add/remove/modify headers here
+    setHeadersForCacheLength(rese,0);
 })
-app.get("/randomsvg1.svg", (req, res) => {
-  setHeadersForCacheLength(res,5);
+  .pipe(res);
+})
+app.get("/randomsvg2.svg", (req, res) => {
+
+  res.set('Cache-Control', 'max-age=0, no-cache, no-store, must-revalidate'); // 1 year
+
 console.log(`https://placeholder.pics/svg/${randomNumber(300,400)}/`)
-  request(`https://placeholder.pics/svg/${randomNumber(300,400)}/`).pipe(res);
+  request(`https://placeholder.pics/svg/${randomNumber(300,400)}/`)
+  .on("response", rese => {
+    // You can add/remove/modify headers here
+    setHeadersForCacheLength(rese,0);
+})
+  .pipe(res);
 })
 var port = process.env.PORT || 3001
 app.listen(port, () => console.log("listening to the port ", port))
