@@ -47,9 +47,10 @@ function setHeadersForCacheLength(res, cacheLengthSeconds) {
 }
 
 app.get("/unsplash", (req, res) => {
+  setHeadersForCacheLength(res,5);
   request("https://source.unsplash.com/random/800x400?space").pipe(res);
 })
-app.get("/randomsvg.svg", (req, res) => {
+app.get("/randomsvg1.svg", (req, res) => {
   setHeadersForCacheLength(res,5);
 console.log(`https://placeholder.pics/svg/${randomNumber(300,400)}/`)
   request(`https://placeholder.pics/svg/${randomNumber(300,400)}/`).pipe(res);
