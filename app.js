@@ -21,9 +21,16 @@ app.get("/", (req, res) => {
     });
 })
 
+function randomNumber(min, max) {  
+  return Math.random() * (max - min) + min; 
+}  
 
 app.get("/unsplash", (req, res) => {
   request("https://source.unsplash.com/random/800x400?space").pipe(res);
+})
+app.get("/randomsvg.svg", (req, res) => {
+console.log(`https://placeholder.pics/svg/${randomNumber(300,400)}/`)
+  request(`https://placeholder.pics/svg/${randomNumber(300,400)}/`).pipe(res);
 })
 var port = process.env.PORT || 3001
 app.listen(port, () => console.log("listening to the port ", port))
