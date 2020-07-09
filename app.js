@@ -46,7 +46,7 @@ function setHeadersForCacheLength(res, cacheLengthSeconds) {
   res.headers['Expires'] = expires
 }
 
-app.get("/unsplash", (req, res) => {
+app.get("/unsplash1", (req, res) => {
 
   request("https://source.unsplash.com/random/800x400?space")
   .on("response", rese => {
