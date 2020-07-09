@@ -13,9 +13,7 @@ app.use(allowCrossDomain);
 app.get("/", (req, res) => {
   axios.get('http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=en-US')
     .then(function (response) {
-      res.send({
-        url: "http://bing.com" + response.data.images[0].url
-      });
+      res.redirect("http://bing.com" + response.data.images[0].url);
     })
     .catch(function (error) {
       console.log(error);
